@@ -1,0 +1,13 @@
+{
+  "name": "beatlast-static-host",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static host for BeatLast legal + onboarding assets. Application source is private.",
+  "type": "module",
+  "scripts": {
+    "deploy": "node deploy-site.mjs"
+  },
+  "devDependencies": {
+    "gh-pages": "^6.2.0"
+  }
+}
