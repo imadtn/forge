@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeatLast — Shared Routine</title>
+  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Get the app to add it and start training." />
+  <meta name="theme-color" content="#0B0B0C" />
+  <meta name="robots" content="noindex" />
+  <style>
+    :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; }
+    .wrap { max-width:520px; margin:0 auto; padding:22px 20px 60px; }
+    .nav { display:flex; align-items:center; gap:9px; padding:8px 0 4px; font-weight:800; letter-spacing:.5px; font-size:19px; }
+    .dot { width:11px; height:11px; border-radius:50%; background:var(--volt); box-shadow:0 0 14px var(--volt); }
+    .hero { text-align:center; padding:30px 0 20px; position:relative; }
+    .hero::before { content:""; position:absolute; inset:-30px 0 auto; height:260px; background:radial-gradient(circle at 50% 20%, color-mix(in srgb,var(--volt) 15%, transparent), transparent 62%); pointer-events:none; }
+    .kicker { font-size:12px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--volt); }
+    h1 { font-size:clamp(26px,7vw,36px); line-height:1.08; margin:8px 0 4px; letter-spacing:-.5px; }
+    .sub { color:var(--dim); font-size:15px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:18px 18px 6px; margin:22px 0; position:relative; }
+    .rname { font-size:20px; font-weight:800; margin:0 0 2px; }
+    .rmeta { color:var(--faint); font-size:13px; margin-bottom:14px; }
+    .day { border-top:1px solid var(--line); padding:13px 0; }
+    .day:first-of-type { border-top:none; }
+    .dlabel { font-weight:700; font-size:15px; margin:0 0 6px; display:flex; align-items:center; gap:8px; }
+    .dlabel .n { width:22px; height:22px; border-radius:7px; background:color-mix(in srgb,var(--volt) 16%, transparent); color:var(--volt); font-size:12px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
+    .exs { color:var(--dim); font-size:14px; line-height:1.5; padding-left:30px; margin:0; }
+    .cta { display:block; text-align:center; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:15px 22px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 32%, transparent); margin-top:6px; text-decoration:none; }
+    .hint { text-align:center; color:var(--faint); font-size:13px; margin-top:14px; }
+    .hint a { color:var(--dim); }
+    .err { text-align:center; color:var(--dim); padding:40px 0; }
+    .skel { color:var(--faint); text-align:center; padding:30px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav"><span class="dot"></span>BeatLast</div>
+    <div class="hero">
+      <div class="kicker">Shared with you</div>
+      <h1 id="title">A workout routine</h1>
+      <div class="sub">Get BeatLast to add it and start training.</div>
+    </div>
+    <div id="content"><div class="skel">Loading routine…</div></div>
+    <a class="cta" href="https://apps.apple.com/app/id6782681867">Get BeatLast — App Store</a>
+    <div class="hint">Already have BeatLast? Opening this link on your iPhone launches the app automatically.<br/>
+      <a href="https://beatlast.app">beatlast.app</a></div>
+  </div>
+
+  <script>
+    var APP_STORE = "https://apps.apple.com/app/id6782681867";
+    var API_KEY = "AIzaSyDxNU8QFg6HoKMmyCM7M7OH-yCluUZhiks";
+    var PROJECT = "imadtnforge";
+
+    function b64urlDec(s){ var b=s.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4)b+='='; return decodeURIComponent(escape(atob(b))); }
+    function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+    // compact transport shape: { n:name, c:cycleLen, d:[{ l:label, e:[[name,muscle],...] }] }
+    function render(rt){
+      if(!rt || !Array.isArray(rt.d)){ fail(); return; }
+      document.getElementById('title').textContent = rt.n || 'A workout routine';
+      var days = rt.d;
+      var sessions = days.length, cyc = rt.c || 7, rest = Math.max(0, cyc - sessions);
+      var meta = sessions + ' session' + (sessions!==1?'s':'') + ' · ' + cyc + '-day cycle' + (rest>0? ' · '+rest+' rest':'');
+      var html = '<div class="card"><div class="rname">' + esc(rt.n||'Routine') + '</div>' +
+                 '<div class="rmeta">' + esc(meta) + '</div>';
+      days.forEach(function(d,i){
+        var exs = (d.e||[]).map(function(e){ return esc(e[0]); }).filter(Boolean);
+        html += '<div class="day"><div class="dlabel"><span class="n">' + (i+1) + '</span>' +
+                esc(d.l || ('Session ' + (i+1))) + '</div>' +
+                '<p class="exs">' + (exs.length? exs.join(' · ') : '—') + '</p></div>';
+      });
+      html += '</div>';
+      document.getElementById('content').innerHTML = html;
+    }
+    function fail(){
+      document.getElementById('content').innerHTML =
+        '<div class="err">This shared routine link is invalid or has expired.<br/>Get the app to build your own.</div>';
+    }
+
+    (function(){
+      try {
+        var p = new URLSearchParams(location.search);
+        var imp = p.get('import'), code = p.get('r');
+        if (imp) { try { render(JSON.parse(b64urlDec(imp))); } catch(e){ fail(); } return; }
+        if (code) {
+          var url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
+                    '/databases/(default)/documents/shares/' + encodeURIComponent(code) + '?key=' + API_KEY;
+          fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(doc){
+            var j = doc && doc.fields && doc.fields.j && doc.fields.j.stringValue;
+            if (!j) { fail(); return; }
+            try { render(JSON.parse(j)); } catch(e){ fail(); }
+          }).catch(fail);
+          return;
+        }
+        // no params → this is just an entry point; send visitors to the store
+        document.getElementById('content').innerHTML =
+          '<div class="err">Open a shared routine link to preview it here.</div>';
+      } catch(e){ fail(); }
+    })();
+  </script>
+</body>
+</html>

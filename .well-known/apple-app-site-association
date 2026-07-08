@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "UT67ZDZLFD.com.imadtn.forge",
+        "paths": ["/r/*", "/r"]
+      }
+    ]
+  }
+}
