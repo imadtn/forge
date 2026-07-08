@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- full-bleed background for maskable safe zone -->
+  <rect width="512" height="512" fill="#0B0B0C"/>
+  <g fill="#C6F84E">
+    <rect x="132" y="216" width="40" height="80" rx="15"/>
+    <rect x="172" y="196" width="40" height="120" rx="16"/>
+    <rect x="300" y="196" width="40" height="120" rx="16"/>
+    <rect x="340" y="216" width="40" height="80" rx="15"/>
+  </g>
+  <line x1="186" y1="256" x2="326" y2="256" stroke="#C6F84E" stroke-width="28" stroke-linecap="round"/>
+</svg>

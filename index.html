@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeatLast — Beat Your Last Session</title>
+  <meta name="description" content="The fastest way to log your lifts and know you're getting stronger. Lightning-fast logging, in-session comparisons to last time, an AI coach, and a streak that keeps you showing up." />
+  <meta name="theme-color" content="#0B0B0C" />
+  <meta property="og:title" content="BeatLast — Beat Your Last Session" />
+  <meta property="og:description" content="Log fast. Train hard. See your gains. A lifting tracker built to make every session beat your last." />
+  <style>
+    :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--text); font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; }
+    .wrap { max-width:980px; margin:0 auto; padding:0 22px; }
+    .nav { display:flex; align-items:center; justify-content:space-between; padding:20px 0; }
+    .brand { display:flex; align-items:center; gap:9px; font-weight:800; letter-spacing:.5px; font-size:20px; }
+    .dot { width:11px; height:11px; border-radius:50%; background:var(--volt); box-shadow:0 0 14px var(--volt); }
+    .nav a.small { color:var(--dim); font-size:14px; }
+
+    .hero { text-align:center; padding:54px 0 30px; position:relative; }
+    .hero::before { content:""; position:absolute; inset:-40px 0 auto; height:340px; background:radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--volt) 16%, transparent), transparent 60%); pointer-events:none; }
+    .badge { display:inline-block; font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--volt); background:color-mix(in srgb,var(--volt) 12%, transparent); border:1px solid color-mix(in srgb,var(--volt) 35%, transparent); border-radius:30px; padding:5px 13px; }
+    h1 { font-size:clamp(40px,8vw,68px); line-height:1.02; margin:18px 0 8px; letter-spacing:-1px; }
+    h1 .v { color:var(--volt); }
+    .slogan { font-size:clamp(15px,3.4vw,19px); color:var(--dim); max-width:540px; margin:0 auto; }
+    .cta { display:inline-flex; align-items:center; gap:10px; margin-top:26px; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:14px 24px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 34%, transparent); }
+    .cta.sub { font-size:12px; color:var(--faint); display:block; background:none; box-shadow:none; padding:8px 0 0; font-weight:500; }
+
+    .principle { text-align:center; max-width:660px; margin:60px auto 8px; }
+    .principle h2 { font-size:clamp(24px,5vw,34px); margin:0 0 12px; }
+    .principle p { color:var(--dim); font-size:17px; }
+    .principle b { color:var(--text); }
+
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:14px; margin:34px 0; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; }
+    .card .ic { width:40px; height:40px; border-radius:11px; background:color-mix(in srgb,var(--volt) 14%, transparent); display:flex; align-items:center; justify-content:center; margin-bottom:12px; font-size:20px; }
+    .card h3 { margin:0 0 5px; font-size:16px; }
+    .card p { margin:0; color:var(--dim); font-size:14px; }
+
+    .hook { text-align:center; background:var(--panel); border:1px solid var(--line); border-radius:20px; padding:34px 24px; margin:40px 0; }
+    .hook h2 { font-size:clamp(22px,4.5vw,30px); margin:0 0 12px; }
+    .hook p { color:var(--dim); max-width:560px; margin:0 auto 18px; }
+    .hook b { color:var(--volt); }
+
+    footer { border-top:1px solid var(--line); margin-top:50px; padding:26px 0 50px; color:var(--faint); font-size:13px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between; }
+    footer a { color:var(--dim); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="nav">
+      <div class="brand"><span class="dot"></span>BeatLast</div>
+      <a class="small" href="#features">Features</a>
+    </div>
+
+    <section class="hero">
+      <span class="badge">Beat Your Last Session</span>
+      <h1>Get stronger,<br/><span class="v">every session.</span></h1>
+      <p class="slogan">The fastest way to log your lifts and know you're actually getting stronger — with in-session comparisons to last time and an AI coach in your pocket.</p>
+      <a class="cta" href="#">Coming soon to the App Store</a>
+      <span class="cta sub">iPhone · free to start</span>
+    </section>
+
+    <section class="principle">
+      <h2>Train harder each time.</h2>
+      <p>To build muscle and strength, every session has to beat the last — <b>more reps</b>, or a little <b>more weight</b>. BeatLast makes that the whole point.</p>
+    </section>
+
+    <section class="grid" id="features">
+      <div class="card"><div class="ic">⚡</div><h3>One-tap logging</h3><p>Log a set in a single tap mid-workout — the rest timer runs itself, so you never lose your flow.</p></div>
+      <div class="card"><div class="ic">↗</div><h3>Beat your last</h3><p>Every lift shows last time's numbers right there — so you always know exactly what to beat.</p></div>
+      <div class="card"><div class="ic">✦</div><h3>AI coach</h3><p>Build a routine by chatting, get session reviews, and ask anything — a coach that knows your history.</p></div>
+      <div class="card"><div class="ic">📈</div><h3>See your gains</h3><p>Quick-glance charts and automatic PRs prove you're climbing, week after week.</p></div>
+      <div class="card"><div class="ic">🔥</div><h3>Keep the streak</h3><p>A training calendar, streaks, and milestones that keep you showing up.</p></div>
+      <div class="card"><div class="ic">🛠️</div><h3>Your routine</h3><p>Build it yourself with dead-simple controls, or let the Coach do it. Tweak anytime.</p></div>
+    </section>
+
+    <section class="hook">
+      <h2>Free for the stuff that matters.</h2>
+      <p>Fast logging, progress, and streaks are <b>free, forever</b> — no subscription for the things you actually came for. The AI Coach is free to try, then optional.</p>
+    </section>
+
+    <footer>
+      <div class="brand" style="font-size:16px;"><span class="dot"></span>BeatLast</div>
+      <div>
+        <a href="privacy.html">Privacy</a> &nbsp;·&nbsp;
+        <a href="terms.html">Terms</a> &nbsp;·&nbsp;
+        <a href="mailto:imadtn@gmail.com">Support</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
