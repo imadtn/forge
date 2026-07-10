@@ -22,7 +22,8 @@
   <script>
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
     // app imports it — or "GET" if not. Injected early with the code from the URL so Safari picks it up on load.
-    (function () { try { var q = new URLSearchParams(location.search); var c = q.get('r'); var i = q.get('import'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : (i ? ', app-argument=beatlast://import?import=' + encodeURIComponent(i) : '')); document.head.appendChild(m); } catch (e) {} })();
+    // window.__code = injected by the Cloudflare worker for PATH-form links (/r/<code>), which carry no ?r=
+    (function () { try { var q = new URLSearchParams(location.search); var c = q.get('r') || window.__code || null; var i = q.get('import'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : (i ? ', app-argument=beatlast://import?import=' + encodeURIComponent(i) : '')); document.head.appendChild(m); } catch (e) {} })();
   </script>
   <style>
     :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
@@ -131,7 +132,7 @@
       var code = null, imp = null;
       try {
         var p = new URLSearchParams(location.search);
-        imp = p.get('import'); code = p.get('r');
+        imp = p.get('import'); code = p.get('r') || window.__code || null;   // __code = worker-injected for path-form links
         if (imp) { try { render(JSON.parse(b64urlDec(imp))); } catch(e){ fail(); } }
         else if (code) {
           var url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
