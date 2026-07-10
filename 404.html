@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BeatLast</title>
+  <script>
+    // GitHub Pages serves this for any unmatched path. A path-based routine link
+    // (beatlast.app/r/<slug>) has no static file, so it lands here — forward it to
+    // the existing /r/ receiver as ?r=<slug>. Anything else → the marketing landing.
+    (function () {
+      var p = location.pathname || "";
+      var m = p.match(/^\/r\/([^\/?#]+)\/?$/);
+      if (m && m[1]) { location.replace("/r/?r=" + encodeURIComponent(m[1]) + (location.hash || "")); }
+      else { location.replace("/"); }
+    })();
+  </script>
+</head>
+<body></body>
+</html>

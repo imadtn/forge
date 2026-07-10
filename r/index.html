@@ -4,9 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BeatLast — Shared Routine</title>
-  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Get the app to add it and start training." />
+  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Open it in the app to add it and start training." />
   <meta name="theme-color" content="#0B0B0C" />
   <meta name="robots" content="noindex" />
+  <script>
+    // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
+    // app imports it — or "GET" if not. Injected early with the code from the URL so Safari picks it up on load.
+    (function () { try { var c = new URLSearchParams(location.search).get('r'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : ''); document.head.appendChild(m); } catch (e) {} })();
+  </script>
   <style>
     :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
     * { box-sizing:border-box; }
@@ -14,23 +19,27 @@
     .wrap { max-width:520px; margin:0 auto; padding:22px 20px 60px; }
     .nav { display:flex; align-items:center; gap:9px; padding:8px 0 4px; font-weight:800; letter-spacing:.5px; font-size:19px; }
     .dot { width:11px; height:11px; border-radius:50%; background:var(--volt); box-shadow:0 0 14px var(--volt); }
-    .hero { text-align:center; padding:30px 0 20px; position:relative; }
-    .hero::before { content:""; position:absolute; inset:-30px 0 auto; height:260px; background:radial-gradient(circle at 50% 20%, color-mix(in srgb,var(--volt) 15%, transparent), transparent 62%); pointer-events:none; }
+    .hero { text-align:center; padding:26px 0 14px; position:relative; }
+    .hero::before { content:""; position:absolute; inset:-30px 0 auto; height:240px; background:radial-gradient(circle at 50% 20%, color-mix(in srgb,var(--volt) 15%, transparent), transparent 62%); pointer-events:none; }
     .kicker { font-size:12px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--volt); }
-    h1 { font-size:clamp(26px,7vw,36px); line-height:1.08; margin:8px 0 4px; letter-spacing:-.5px; }
+    h1 { font-size:clamp(24px,6.4vw,34px); line-height:1.08; margin:8px 0 4px; letter-spacing:-.5px; }
     .sub { color:var(--dim); font-size:15px; }
-    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:18px 18px 6px; margin:22px 0; position:relative; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:18px 18px 6px; margin:20px 0; position:relative; }
     .rname { font-size:20px; font-weight:800; margin:0 0 2px; }
     .rmeta { color:var(--faint); font-size:13px; margin-bottom:14px; }
     .day { border-top:1px solid var(--line); padding:13px 0; }
     .day:first-of-type { border-top:none; }
-    .dlabel { font-weight:700; font-size:15px; margin:0 0 6px; display:flex; align-items:center; gap:8px; }
-    .dlabel .n { width:22px; height:22px; border-radius:7px; background:color-mix(in srgb,var(--volt) 16%, transparent); color:var(--volt); font-size:12px; font-weight:800; display:inline-flex; align-items:center; justify-content:center; }
-    .exs { color:var(--dim); font-size:14px; line-height:1.5; padding-left:30px; margin:0; }
-    .cta { display:block; text-align:center; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:15px 22px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 32%, transparent); margin-top:6px; text-decoration:none; }
-    .hint { text-align:center; color:var(--faint); font-size:13px; margin-top:14px; }
+    .dlabel { font-weight:800; font-size:16px; margin:0 0 4px; letter-spacing:-.2px; }
+    .dmus { color:var(--faint); font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; margin:0 0 9px; }
+    .exrows { display:flex; flex-direction:column; }
+    .ex { color:var(--text); font-size:14.5px; padding:6px 0; border-top:1px solid rgba(255,255,255,.05); display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+    .ex:first-child { border-top:none; padding-top:0; }
+    .ex .sr { color:var(--faint); font-size:12.5px; font-family:ui-monospace,"SF Mono",Menlo,monospace; flex-shrink:0; }
+    .cta { display:block; text-align:center; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:16px 22px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 30%, transparent); margin-top:8px; text-decoration:none; cursor:pointer; }
+    .cta2 { display:block; text-align:center; background:transparent; color:var(--text); font-weight:700; font-size:15px; padding:13px 22px; border-radius:14px; border:1px solid var(--line); margin-top:10px; text-decoration:none; }
+    .hint { text-align:center; color:var(--faint); font-size:13px; margin-top:16px; line-height:1.5; }
     .hint a { color:var(--dim); }
-    .err { text-align:center; color:var(--dim); padding:40px 0; }
+    .err { text-align:center; color:var(--dim); padding:36px 0; }
     .skel { color:var(--faint); text-align:center; padding:30px 0; }
   </style>
 </head>
@@ -40,12 +49,12 @@
     <div class="hero">
       <div class="kicker">Shared with you</div>
       <h1 id="title">A workout routine</h1>
-      <div class="sub">Get BeatLast to add it and start training.</div>
+      <div class="sub">Open it in BeatLast to add it and start training.</div>
     </div>
     <div id="content"><div class="skel">Loading routine…</div></div>
-    <a class="cta" href="https://apps.apple.com/app/id6782681867">Get BeatLast — App Store</a>
-    <div class="hint">Already have BeatLast? Opening this link on your iPhone launches the app automatically.<br/>
-      <a href="https://beatlast.app">beatlast.app</a></div>
+    <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Open in BeatLast</a>
+    <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Don't have the app? Get BeatLast — free</a>
+    <div class="hint">Have BeatLast installed? Tap <b>Open in BeatLast</b> to add this routine.<br/>New here? Grab the free app and it'll be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
   </div>
 
   <script>
@@ -55,6 +64,21 @@
 
     function b64urlDec(s){ var b=s.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4)b+='='; return decodeURIComponent(escape(atob(b))); }
     function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+    // Open the installed app via the custom scheme; if it doesn't take over the tab in ~1.5s (not installed), go to
+    // the App Store. This is the funnel for a TYPED link (Safari/Chrome address bar), which does NOT fire a Universal
+    // Link the way a TAPPED link from another app does.
+    function armToken(code){ try { if (code && navigator.clipboard) navigator.clipboard.writeText('beatlast:r:' + code); } catch (e) {} }
+    function openApp(code){
+      if (!code) { window.location = APP_STORE; return; }
+      // Arm the deferred-deep-link recovery token NOW, inside the click gesture: if the app isn't installed we
+      // fall through to the App Store below, and a fresh install then auto-recovers the routine from the clipboard.
+      armToken(code);
+      var opened = false;
+      document.addEventListener('visibilitychange', function(){ if (document.hidden) opened = true; });
+      try { window.location = 'beatlast://import?r=' + encodeURIComponent(code); } catch(e){}
+      setTimeout(function(){ if (!opened) window.location = APP_STORE; }, 1500);
+    }
 
     // compact transport shape: { n:name, c:cycleLen, d:[{ l:label, e:[[name,muscle],...] }] }
     function render(rt){
@@ -66,10 +90,16 @@
       var html = '<div class="card"><div class="rname">' + esc(rt.n||'Routine') + '</div>' +
                  '<div class="rmeta">' + esc(meta) + '</div>';
       days.forEach(function(d,i){
-        var exs = (d.e||[]).map(function(e){ return esc(e[0]); }).filter(Boolean);
-        html += '<div class="day"><div class="dlabel"><span class="n">' + (i+1) + '</span>' +
-                esc(d.l || ('Session ' + (i+1))) + '</div>' +
-                '<p class="exs">' + (exs.length? exs.join(' · ') : '—') + '</p></div>';
+        var exList = d.e || [];
+        // muscles worked this session — unique, in first-seen order, uppercase (named, no color code) like the sticker
+        var seen = {}, muscles = [];
+        exList.forEach(function(e){ var m = e[1]; if (m && !seen[m]) { seen[m] = 1; muscles.push(String(m).toUpperCase()); } });
+        var rows = exList.map(function(e){ var sr = e[2] ? '<span class="sr">' + esc(e[2]) + '</span>' : ''; return '<div class="ex"><span>' + esc(e[0]) + '</span>' + sr + '</div>'; }).join('') || '<div class="ex">—</div>';
+        html += '<div class="day">' +
+                  '<div class="dlabel">' + esc(d.l || ('Session ' + (i+1))) + '</div>' +
+                  (muscles.length ? '<div class="dmus">' + muscles.map(esc).join(' · ') + '</div>' : '') +
+                  '<div class="exrows">' + rows + '</div>' +
+                '</div>';
       });
       html += '</div>';
       document.getElementById('content').innerHTML = html;
@@ -80,11 +110,12 @@
     }
 
     (function(){
+      var code = null;
       try {
         var p = new URLSearchParams(location.search);
-        var imp = p.get('import'), code = p.get('r');
-        if (imp) { try { render(JSON.parse(b64urlDec(imp))); } catch(e){ fail(); } return; }
-        if (code) {
+        var imp = p.get('import'); code = p.get('r');
+        if (imp) { try { render(JSON.parse(b64urlDec(imp))); } catch(e){ fail(); } }
+        else if (code) {
           var url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
                     '/databases/(default)/documents/shares/' + encodeURIComponent(code) + '?key=' + API_KEY;
           fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(doc){
@@ -92,12 +123,25 @@
             if (!j) { fail(); return; }
             try { render(JSON.parse(j)); } catch(e){ fail(); }
           }).catch(fail);
-          return;
+        } else {
+          document.getElementById('content').innerHTML =
+            '<div class="err">Open a shared routine link to preview it here.</div>';
         }
-        // no params → this is just an entry point; send visitors to the store
-        document.getElementById('content').innerHTML =
-          '<div class="err">Open a shared routine link to preview it here.</div>';
       } catch(e){ fail(); }
+      // wire the primary CTA to open the app (falls back to the App Store)
+      var openBtn = document.getElementById('openBtn');
+      if (openBtn) openBtn.addEventListener('click', function(ev){ if (code) { ev.preventDefault(); openApp(code); } });
+      // deferred deep link: copy a recovery token to the clipboard when heading to the App Store, so a NEW user gets
+      // the routine auto-imported (or can paste it into "Add from code") after installing — the install boundary
+      // otherwise loses which routine sent them. Write FIRST, then navigate: an async writeText racing the outbound
+      // App-Store navigation can otherwise be torn down before it commits and silently drop the token.
+      var getBtn = document.getElementById('getBtn');
+      if (getBtn && code) getBtn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        var go = function(){ window.location = APP_STORE; };
+        try { if (navigator.clipboard) { navigator.clipboard.writeText('beatlast:r:' + code).then(go, go); } else { go(); } }
+        catch (e) { go(); }
+      });
     })();
   </script>
 </body>
