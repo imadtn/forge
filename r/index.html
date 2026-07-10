@@ -22,7 +22,7 @@
   <script>
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
     // app imports it — or "GET" if not. Injected early with the code from the URL so Safari picks it up on load.
-    (function () { try { var c = new URLSearchParams(location.search).get('r'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : ''); document.head.appendChild(m); } catch (e) {} })();
+    (function () { try { var q = new URLSearchParams(location.search); var c = q.get('r'); var i = q.get('import'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : (i ? ', app-argument=beatlast://import?import=' + encodeURIComponent(i) : '')); document.head.appendChild(m); } catch (e) {} })();
   </script>
   <style>
     :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
@@ -82,15 +82,19 @@
     // Open the installed app via the custom scheme; if it doesn't take over the tab in ~1.5s (not installed), go to
     // the App Store. This is the funnel for a TYPED link (Safari/Chrome address bar), which does NOT fire a Universal
     // Link the way a TAPPED link from another app does.
-    function armToken(code){ try { if (code && navigator.clipboard) navigator.clipboard.writeText('beatlast:r:' + code); } catch (e) {} }
-    function openApp(code){
-      if (!code) { window.location = APP_STORE; return; }
-      // Arm the deferred-deep-link recovery token NOW, inside the click gesture: if the app isn't installed we
-      // fall through to the App Store below, and a fresh install then auto-recovers the routine from the clipboard.
-      armToken(code);
+    // TOKEN = the deferred-deep-link recovery string, for BOTH link kinds:
+    //   beatlast:r:<code>   short-code links (signed-in shares)
+    //   beatlast:i:<b64url> self-contained ?import= links (signed-out shares — added 2026-07-10 so this
+    //                       cohort's shares also survive the App-Store install boundary)
+    function armToken(token){ try { if (token && navigator.clipboard) navigator.clipboard.writeText(token); } catch (e) {} }
+    function openApp(token, scheme){
+      if (!scheme) { window.location = APP_STORE; return; }
+      // Arm the recovery token NOW, inside the click gesture: if the app isn't installed we fall through
+      // to the App Store below, and a fresh install then auto-recovers the routine from the clipboard.
+      armToken(token);
       var opened = false;
       document.addEventListener('visibilitychange', function(){ if (document.hidden) opened = true; });
-      try { window.location = 'beatlast://import?r=' + encodeURIComponent(code); } catch(e){}
+      try { window.location = scheme; } catch(e){}
       setTimeout(function(){ if (!opened) window.location = APP_STORE; }, 1500);
     }
 
@@ -124,10 +128,10 @@
     }
 
     (function(){
-      var code = null;
+      var code = null, imp = null;
       try {
         var p = new URLSearchParams(location.search);
-        var imp = p.get('import'); code = p.get('r');
+        imp = p.get('import'); code = p.get('r');
         if (imp) { try { render(JSON.parse(b64urlDec(imp))); } catch(e){ fail(); } }
         else if (code) {
           var url = 'https://firestore.googleapis.com/v1/projects/' + PROJECT +
@@ -152,18 +156,22 @@
             '<div class="err">Open a shared routine link to preview it here.</div>';
         }
       } catch(e){ fail(); }
+      // one recovery token + one custom-scheme deep link, whichever link kind this is
+      var TOKEN  = code ? ('beatlast:r:' + code) : (imp ? ('beatlast:i:' + imp) : null);
+      var SCHEME = code ? ('beatlast://import?r=' + encodeURIComponent(code))
+                 : (imp ? ('beatlast://import?import=' + encodeURIComponent(imp)) : null);
       // wire the primary CTA to open the app (falls back to the App Store)
       var openBtn = document.getElementById('openBtn');
-      if (openBtn) openBtn.addEventListener('click', function(ev){ if (code) { ev.preventDefault(); openApp(code); } });
+      if (openBtn) openBtn.addEventListener('click', function(ev){ if (SCHEME) { ev.preventDefault(); openApp(TOKEN, SCHEME); } });
       // deferred deep link: copy a recovery token to the clipboard when heading to the App Store, so a NEW user gets
       // the routine auto-imported (or can paste it into "Add from code") after installing — the install boundary
       // otherwise loses which routine sent them. Write FIRST, then navigate: an async writeText racing the outbound
       // App-Store navigation can otherwise be torn down before it commits and silently drop the token.
       var getBtn = document.getElementById('getBtn');
-      if (getBtn && code) getBtn.addEventListener('click', function(ev){
+      if (getBtn && TOKEN) getBtn.addEventListener('click', function(ev){
         ev.preventDefault();
         var go = function(){ window.location = APP_STORE; };
-        try { if (navigator.clipboard) { navigator.clipboard.writeText('beatlast:r:' + code).then(go, go); } else { go(); } }
+        try { if (navigator.clipboard) { navigator.clipboard.writeText(TOKEN).then(go, go); } else { go(); } }
         catch (e) { go(); }
       });
       // a stuck skeleton reads as "broken" — after 6s swap it for an honest slow-network line (CTAs above stay live)

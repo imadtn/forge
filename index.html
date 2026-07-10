@@ -34,6 +34,10 @@
     .slogan { font-size:clamp(15px,3.4vw,19px); color:var(--dim); max-width:540px; margin:0 auto; }
     .cta { display:inline-flex; align-items:center; gap:10px; margin-top:26px; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:14px 24px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 34%, transparent); }
     .cta.sub { font-size:12px; color:var(--faint); display:block; background:none; box-shadow:none; padding:8px 0 0; font-weight:500; }
+    .badge-dl { display:inline-block; margin-top:26px; } .badge-dl img { height:56px; display:block; }
+    .eunote { font-size:13px; color:var(--faint); margin-top:14px; }
+    .shots { display:flex; gap:16px; justify-content:center; align-items:flex-start; margin:40px 0 4px; flex-wrap:wrap; }
+    .shots img { width:min(230px, 28vw); min-width:150px; border-radius:24px; border:1px solid var(--line); box-shadow:0 22px 60px rgba(0,0,0,.55); }
 
     .principle { text-align:center; max-width:660px; margin:60px auto 8px; }
     .principle h2 { font-size:clamp(24px,5vw,34px); margin:0 0 12px; }
@@ -66,8 +70,15 @@
       <span class="badge">Beat Your Last Session</span>
       <h1>Get stronger,<br/><span class="v">every session.</span></h1>
       <p class="slogan">The fastest way to log your lifts and know you're actually getting stronger — with in-session comparisons to last time and an AI coach in your pocket.</p>
-      <a class="cta" href="https://apps.apple.com/app/id6782681867">Download on the App Store</a>
+      <a class="badge-dl" href="https://apps.apple.com/app/id6782681867" aria-label="Download BeatLast on the App Store"><img src="appstore-badge.svg" alt="Download on the App Store" /></a>
       <span class="cta sub">iPhone · free to start</span>
+      <div class="eunote" id="eunote" style="display:none">🇪🇺 Not on the EU App Store quite yet — approval in progress. Everywhere else, it's live.</div>
+    </section>
+
+    <section class="shots" aria-label="App screenshots">
+      <img src="shots/log.jpg" alt="Logging a set mid-workout with last time's numbers to beat" loading="lazy" />
+      <img src="shots/pr.jpg" alt="A new personal record celebration" loading="lazy" />
+      <img src="shots/progress.jpg" alt="Progress charts and records" loading="lazy" />
     </section>
 
     <section class="principle">
@@ -87,6 +98,7 @@
     <section class="hook">
       <h2>Free for the stuff that matters.</h2>
       <p>Fast logging, progress, and streaks are <b>free, forever</b> — no subscription for the things you actually came for. The AI Coach is free to try, then optional.</p>
+      <a class="badge-dl" href="https://apps.apple.com/app/id6782681867" aria-label="Download BeatLast on the App Store" style="margin-top:6px;"><img src="appstore-badge.svg" alt="Download on the App Store" /></a>
     </section>
 
     <footer>
@@ -98,5 +110,14 @@
       </div>
     </footer>
   </div>
+  <script>
+    // EU-27: the app isn't listed there yet (DSA trader verification pending) — say so instead of a dead
+    // App Store bounce. Same detection as the /r/ receiver. REMOVE once EU goes live.
+    try {
+      var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
+      var EU = /^Europe\/(Vienna|Brussels|Sofia|Zagreb|Prague|Copenhagen|Tallinn|Helsinki|Paris|Berlin|Busingen|Athens|Budapest|Dublin|Rome|Riga|Vilnius|Luxembourg|Malta|Amsterdam|Warsaw|Lisbon|Bucharest|Bratislava|Ljubljana|Madrid|Stockholm)$|^Atlantic\/(Azores|Madeira|Canary)$|^Asia\/Nicosia$/;
+      if (EU.test(tz)) { var n = document.getElementById('eunote'); if (n) n.style.display = 'block'; }
+    } catch (e) {}
+  </script>
 </body>
 </html>
