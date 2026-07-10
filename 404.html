@@ -4,6 +4,16 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BeatLast</title>
+  <!-- unfurl fallback: legacy PATH-form share links (/r/<code>) land here with HTTP 404. Most link-preview
+       crawlers skip 404s entirely (which is why minted links moved to the ?r= query form), but some
+       (e.g. Telegram) still parse the body — give them a real card instead of nothing. -->
+  <meta name="description" content="A workout routine was shared with you on BeatLast." />
+  <meta property="og:site_name" content="BeatLast" />
+  <meta property="og:title" content="A workout routine was shared with you" />
+  <meta property="og:description" content="Preview the program and add it to BeatLast — free. Beat your last session." />
+  <meta property="og:image" content="https://beatlast.app/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://beatlast.app/og.jpg" />
   <script>
     // GitHub Pages serves this for any unmatched path. A path-based routine link
     // (beatlast.app/r/<slug>) has no static file, so it lands here — forward it to

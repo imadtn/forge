@@ -7,6 +7,18 @@
   <meta name="description" content="Someone shared a workout routine with you on BeatLast. Open it in the app to add it and start training." />
   <meta name="theme-color" content="#0B0B0C" />
   <meta name="robots" content="noindex" />
+  <!-- link-preview card (iMessage/WhatsApp/Slack unfurl). Minted links use the ?r= QUERY form on purpose:
+       GitHub Pages serves this page for them with HTTP 200, so crawlers (which don't run JS) actually
+       read these tags — the legacy PATH form (/r/<code>) 404s and unfurled as a blank bubble. -->
+  <meta property="og:site_name" content="BeatLast" />
+  <meta property="og:title" content="A workout routine was shared with you" />
+  <meta property="og:description" content="Preview the program and add it to BeatLast — free. Beat your last session." />
+  <meta property="og:image" content="https://beatlast.app/og.jpg" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="A workout routine was shared with you" />
+  <meta name="twitter:description" content="Preview the program and add it to BeatLast — free. Beat your last session." />
+  <meta name="twitter:image" content="https://beatlast.app/og.jpg" />
   <script>
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
     // app imports it — or "GET" if not. Injected early with the code from the URL so Safari picks it up on load.
@@ -52,8 +64,10 @@
       <div class="sub">Open it in BeatLast to add it and start training.</div>
     </div>
     <div id="content"><div class="skel">Loading routine…</div></div>
+    <noscript><style>.skel{display:none}</style><div class="err">This preview needs JavaScript — but the routine itself will be waiting in the app.</div></noscript>
     <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Open in BeatLast</a>
     <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Don't have the app? Get BeatLast — free</a>
+    <div class="hint" id="eunote" style="display:none">🇪🇺 Heads up — BeatLast isn't on the EU App Store quite yet (approval in progress). Save this link; everywhere else it's live now.</div>
     <div class="hint">Have BeatLast installed? Tap <b>Open in BeatLast</b> to add this routine.<br/>New here? Grab the free app and it'll be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
   </div>
 
@@ -121,7 +135,17 @@
           fetch(url).then(function(r){ return r.ok ? r.json() : null; }).then(function(doc){
             var j = doc && doc.fields && doc.fields.j && doc.fields.j.stringValue;
             if (!j) { fail(); return; }
-            try { render(JSON.parse(j)); } catch(e){ fail(); }
+            try { render(JSON.parse(j)); } catch(e){ fail(); return; }
+            // count the view — unauthenticated strict +1, allowed by the shares rules' counter branch.
+            // Without this the owner's "👁 views" only counted in-app opens and read ~0 forever.
+            try {
+              fetch('https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents:commit?key=' + API_KEY, {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ writes: [{ transform: {
+                  document: 'projects/' + PROJECT + '/databases/(default)/documents/shares/' + code,
+                  fieldTransforms: [{ fieldPath: 'views', increment: { integerValue: '1' } }] } }] })
+              }).catch(function(){});
+            } catch(e){}
           }).catch(fail);
         } else {
           document.getElementById('content').innerHTML =
@@ -142,6 +166,16 @@
         try { if (navigator.clipboard) { navigator.clipboard.writeText('beatlast:r:' + code).then(go, go); } else { go(); } }
         catch (e) { go(); }
       });
+      // a stuck skeleton reads as "broken" — after 6s swap it for an honest slow-network line (CTAs above stay live)
+      setTimeout(function(){ var el = document.querySelector('.skel');
+        if (el) el.textContent = 'Still loading — slow connection? The routine will be waiting in the app either way.'; }, 6000);
+      // EU-27: the app isn't listed there yet (DSA trader verification pending) — say so instead of
+      // bouncing visitors to Apple's dead "not available in your region" page. REMOVE once EU goes live.
+      try {
+        var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
+        var EU = /^Europe\/(Vienna|Brussels|Sofia|Zagreb|Prague|Copenhagen|Tallinn|Helsinki|Paris|Berlin|Busingen|Athens|Budapest|Dublin|Rome|Riga|Vilnius|Luxembourg|Malta|Amsterdam|Warsaw|Lisbon|Bucharest|Bratislava|Ljubljana|Madrid|Stockholm)$|^Atlantic\/(Azores|Madeira|Canary)$|^Asia\/Nicosia$/;
+        if (EU.test(tz)) { var n = document.getElementById('eunote'); if (n) n.style.display = 'block'; }
+      } catch(e){}
     })();
   </script>
 </body>
