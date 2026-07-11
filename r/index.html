@@ -68,7 +68,6 @@
     <noscript><style>.skel{display:none}</style><div class="err">This preview needs JavaScript — but the routine itself will be waiting in the app.</div></noscript>
     <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Open in BeatLast</a>
     <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Don't have the app? Get BeatLast — free</a>
-    <div class="hint" id="eunote" style="display:none">🇪🇺 Heads up — BeatLast isn't on the EU App Store quite yet (approval in progress). Save this link; everywhere else it's live now.</div>
     <div class="hint">Have BeatLast installed? Tap <b>Open in BeatLast</b> to add this routine.<br/>New here? Grab the free app and it'll be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
   </div>
 
@@ -178,13 +177,6 @@
       // a stuck skeleton reads as "broken" — after 6s swap it for an honest slow-network line (CTAs above stay live)
       setTimeout(function(){ var el = document.querySelector('.skel');
         if (el) el.textContent = 'Still loading — slow connection? The routine will be waiting in the app either way.'; }, 6000);
-      // EU-27: the app isn't listed there yet (DSA trader verification pending) — say so instead of
-      // bouncing visitors to Apple's dead "not available in your region" page. REMOVE once EU goes live.
-      try {
-        var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
-        var EU = /^Europe\/(Vienna|Brussels|Sofia|Zagreb|Prague|Copenhagen|Tallinn|Helsinki|Paris|Berlin|Busingen|Athens|Budapest|Dublin|Rome|Riga|Vilnius|Luxembourg|Malta|Amsterdam|Warsaw|Lisbon|Bucharest|Bratislava|Ljubljana|Madrid|Stockholm)$|^Atlantic\/(Azores|Madeira|Canary)$|^Asia\/Nicosia$/;
-        if (EU.test(tz)) { var n = document.getElementById('eunote'); if (n) n.style.display = 'block'; }
-      } catch(e){}
     })();
   </script>
 </body>

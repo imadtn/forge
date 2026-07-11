@@ -72,14 +72,13 @@
       <p class="slogan">The fastest way to log your lifts and know you're actually getting stronger — with in-session comparisons to last time and an AI coach in your pocket.</p>
       <a class="badge-dl" href="https://apps.apple.com/app/id6782681867" aria-label="Download BeatLast on the App Store"><img src="appstore-badge.svg" alt="Download on the App Store" /></a>
       <span class="cta sub">iPhone · free to start</span>
-      <div class="eunote" id="eunote" style="display:none">🇪🇺 Not on the EU App Store quite yet — approval in progress. Everywhere else, it's live.</div>
     </section>
 
-    <!-- 2 shots on purpose (Imad 2026-07-11): the PR shot must wait for a REAL PR banner capture and the
-         progress shot needs data-filled charts — re-capture both on-device before adding them back. -->
     <section class="shots" aria-label="App screenshots">
       <img src="shots/log.jpg" alt="Logging a set mid-workout with last time's numbers to beat" loading="lazy" />
+      <img src="shots/pr.jpg" alt="A real PR celebration while beating last session's squat numbers" loading="lazy" />
       <img src="shots/coach.jpg" alt="Building a routine by chatting with the AI coach" loading="lazy" />
+      <img src="shots/progress.jpg" alt="Strength and volume progression charts, lift by lift" loading="lazy" />
     </section>
 
     <section class="principle">
@@ -111,14 +110,5 @@
       </div>
     </footer>
   </div>
-  <script>
-    // EU-27: the app isn't listed there yet (DSA trader verification pending) — say so instead of a dead
-    // App Store bounce. Same detection as the /r/ receiver. REMOVE once EU goes live.
-    try {
-      var tz = (Intl.DateTimeFormat().resolvedOptions().timeZone) || '';
-      var EU = /^Europe\/(Vienna|Brussels|Sofia|Zagreb|Prague|Copenhagen|Tallinn|Helsinki|Paris|Berlin|Busingen|Athens|Budapest|Dublin|Rome|Riga|Vilnius|Luxembourg|Malta|Amsterdam|Warsaw|Lisbon|Bucharest|Bratislava|Ljubljana|Madrid|Stockholm)$|^Atlantic\/(Azores|Madeira|Canary)$|^Asia\/Nicosia$/;
-      if (EU.test(tz)) { var n = document.getElementById('eunote'); if (n) n.style.display = 'block'; }
-    } catch (e) {}
-  </script>
 </body>
 </html>
