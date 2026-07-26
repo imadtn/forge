@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BeatLast — Shared Routine</title>
-  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Get the full workout in the free app." />
+  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Get the full workout in the app." />
   <meta name="theme-color" content="#0B0B0C" />
   <meta name="robots" content="noindex" />
   <!-- link-preview card (iMessage/WhatsApp/Slack unfurl). Minted links use the ?r= QUERY form on purpose:
@@ -12,12 +12,12 @@
        read these tags — the legacy PATH form (/r/<code>) 404s and unfurled as a blank bubble. -->
   <meta property="og:site_name" content="BeatLast" />
   <meta property="og:title" content="A workout routine was shared with you" />
-  <meta property="og:description" content="Get the full workout in the BeatLast app — free. Beat your last session." />
+  <meta property="og:description" content="Get the full workout in the BeatLast app. Beat your last session." />
   <meta property="og:image" content="https://beatlast.app/og.jpg" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="A workout routine was shared with you" />
-  <meta name="twitter:description" content="Get the full workout in the BeatLast app — free. Beat your last session." />
+  <meta name="twitter:description" content="Get the full workout in the BeatLast app. Beat your last session." />
   <meta name="twitter:image" content="https://beatlast.app/og.jpg" />
   <script>
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
@@ -62,13 +62,13 @@
     <div class="hero">
       <div class="kicker">Shared with you</div>
       <h1 id="title">A workout routine</h1>
-      <div class="sub" id="sub">Get the full workout — free in the BeatLast app.</div>
+      <div class="sub" id="sub">Get the full workout in the BeatLast app.</div>
     </div>
     <div id="content"><div class="skel">Loading routine…</div></div>
     <noscript><style>.skel{display:none}</style><div class="err">The full routine is waiting in the app.</div></noscript>
-    <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Get the full workout — free</a>
+    <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Get the full workout</a>
     <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Download BeatLast on the App Store</a>
-    <div class="hint">Already have BeatLast? The button opens it with this routine ready to add.<br/>New here? Grab the free app and the workout will be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
+    <div class="hint">Already have BeatLast? The button opens it with this routine ready to add.<br/>New here? Grab the app and the workout will be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
   </div>
 
   <script>
@@ -107,7 +107,7 @@
       if(!rt || !Array.isArray(rt.d)){ fail(); return; }
       var name = rt.n || 'A workout routine';
       document.getElementById('title').textContent = 'Get “' + name + '”';
-      document.getElementById('sub').textContent = 'The full workout is in the BeatLast app — free.';
+      document.getElementById('sub').textContent = 'The full workout is in the BeatLast app.';
       var days = rt.d;
       var sessions = days.length, cyc = rt.c || 7, rest = Math.max(0, cyc - sessions);
       var totalEx = 0; days.forEach(function(d){ totalEx += (d.e || []).length; });
@@ -125,7 +125,7 @@
                   '<span class="sr">' + k + ' exercise' + (k!==1?'s':'') + '</span>' +
                 '</div></div>';
       });
-      html += '<div class="unlock">🔒 The exercise list, sets &amp; reps open in the app — <b>free</b>.</div></div>';
+      html += '<div class="unlock">🔒 The exercise list, sets &amp; reps open in the app.</div></div>';
       document.getElementById('content').innerHTML = html;
     }
     function fail(){
