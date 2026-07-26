@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BeatLast — Shared Routine</title>
-  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Open it in the app to add it and start training." />
+  <meta name="description" content="Someone shared a workout routine with you on BeatLast. Get the full workout in the free app." />
   <meta name="theme-color" content="#0B0B0C" />
   <meta name="robots" content="noindex" />
   <!-- link-preview card (iMessage/WhatsApp/Slack unfurl). Minted links use the ?r= QUERY form on purpose:
@@ -12,12 +12,12 @@
        read these tags — the legacy PATH form (/r/<code>) 404s and unfurled as a blank bubble. -->
   <meta property="og:site_name" content="BeatLast" />
   <meta property="og:title" content="A workout routine was shared with you" />
-  <meta property="og:description" content="Preview the program and add it to BeatLast — free. Beat your last session." />
+  <meta property="og:description" content="Get the full workout in the BeatLast app — free. Beat your last session." />
   <meta property="og:image" content="https://beatlast.app/og.jpg" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="A workout routine was shared with you" />
-  <meta name="twitter:description" content="Preview the program and add it to BeatLast — free. Beat your last session." />
+  <meta name="twitter:description" content="Get the full workout in the BeatLast app — free. Beat your last session." />
   <meta name="twitter:image" content="https://beatlast.app/og.jpg" />
   <script>
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
@@ -42,12 +42,12 @@
     .rmeta { color:var(--faint); font-size:13px; margin-bottom:14px; }
     .day { border-top:1px solid var(--line); padding:13px 0; }
     .day:first-of-type { border-top:none; }
-    .dlabel { font-weight:800; font-size:16px; margin:0 0 4px; letter-spacing:-.2px; }
-    .dmus { color:var(--faint); font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; margin:0 0 9px; }
-    .exrows { display:flex; flex-direction:column; }
-    .ex { color:var(--text); font-size:14.5px; padding:6px 0; border-top:1px solid rgba(255,255,255,.05); display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
-    .ex:first-child { border-top:none; padding-top:0; }
-    .ex .sr { color:var(--faint); font-size:12.5px; font-family:ui-monospace,"SF Mono",Menlo,monospace; flex-shrink:0; }
+    .dlabel { font-weight:800; font-size:16px; margin:0; letter-spacing:-.2px; }
+    .dmus { color:var(--faint); font-size:12px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; margin:0 0 14px; }
+    .drow { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+    .drow .sr { color:var(--faint); font-size:12.5px; font-family:ui-monospace,"SF Mono",Menlo,monospace; flex-shrink:0; }
+    .unlock { color:var(--faint); font-size:13px; text-align:center; padding:14px 0; border-top:1px solid var(--line); margin-top:2px; }
+    .unlock b { color:var(--dim); }
     .cta { display:block; text-align:center; background:var(--volt); color:#0B0B0C; font-weight:800; font-size:16px; padding:16px 22px; border-radius:14px; box-shadow:0 0 40px color-mix(in srgb,var(--volt) 30%, transparent); margin-top:8px; text-decoration:none; cursor:pointer; }
     .cta2 { display:block; text-align:center; background:transparent; color:var(--text); font-weight:700; font-size:15px; padding:13px 22px; border-radius:14px; border:1px solid var(--line); margin-top:10px; text-decoration:none; }
     .hint { text-align:center; color:var(--faint); font-size:13px; margin-top:16px; line-height:1.5; }
@@ -62,13 +62,13 @@
     <div class="hero">
       <div class="kicker">Shared with you</div>
       <h1 id="title">A workout routine</h1>
-      <div class="sub">Open it in BeatLast to add it and start training.</div>
+      <div class="sub" id="sub">Get the full workout — free in the BeatLast app.</div>
     </div>
     <div id="content"><div class="skel">Loading routine…</div></div>
-    <noscript><style>.skel{display:none}</style><div class="err">This preview needs JavaScript — but the routine itself will be waiting in the app.</div></noscript>
-    <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Open in BeatLast</a>
-    <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Don't have the app? Get BeatLast — free</a>
-    <div class="hint">Have BeatLast installed? Tap <b>Open in BeatLast</b> to add this routine.<br/>New here? Grab the free app and it'll be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
+    <noscript><style>.skel{display:none}</style><div class="err">The full routine is waiting in the app.</div></noscript>
+    <a class="cta" id="openBtn" href="https://apps.apple.com/app/id6782681867">📲 Get the full workout — free</a>
+    <a class="cta2" id="getBtn" href="https://apps.apple.com/app/id6782681867">Download BeatLast on the App Store</a>
+    <div class="hint">Already have BeatLast? The button opens it with this routine ready to add.<br/>New here? Grab the free app and the workout will be waiting inside.<br/><a href="https://beatlast.app">beatlast.app</a></div>
   </div>
 
   <script>
@@ -99,27 +99,33 @@
     }
 
     // compact transport shape: { n:name, c:cycleLen, d:[{ l:label, e:[[name,muscle],...] }] }
+    // TEASER ONLY (2026-07-27 per Imad): the web page no longer lists the exercises/sets — it shows the
+    // routine's name, structure (sessions · cycle · muscles) and per-session exercise COUNTS, and sends
+    // the visitor to the app for the actual workout. The full program stays exactly one tap away for
+    // installed users (Universal Link / the smart CTA) and rides the clipboard token through an install.
     function render(rt){
       if(!rt || !Array.isArray(rt.d)){ fail(); return; }
-      document.getElementById('title').textContent = rt.n || 'A workout routine';
+      var name = rt.n || 'A workout routine';
+      document.getElementById('title').textContent = 'Get “' + name + '”';
+      document.getElementById('sub').textContent = 'The full workout is in the BeatLast app — free.';
       var days = rt.d;
       var sessions = days.length, cyc = rt.c || 7, rest = Math.max(0, cyc - sessions);
-      var meta = sessions + ' session' + (sessions!==1?'s':'') + ' · ' + cyc + '-day cycle' + (rest>0? ' · '+rest+' rest':'');
-      var html = '<div class="card"><div class="rname">' + esc(rt.n||'Routine') + '</div>' +
-                 '<div class="rmeta">' + esc(meta) + '</div>';
+      var totalEx = 0; days.forEach(function(d){ totalEx += (d.e || []).length; });
+      var meta = sessions + ' session' + (sessions!==1?'s':'') + ' · ' + totalEx + ' exercise' + (totalEx!==1?'s':'') + ' · ' + cyc + '-day cycle' + (rest>0? ' · '+rest+' rest':'');
+      // muscles covered across the whole program — unique, first-seen order, uppercase
+      var seen = {}, muscles = [];
+      days.forEach(function(d){ (d.e || []).forEach(function(e){ var m = e[1]; if (m && !seen[m]) { seen[m] = 1; muscles.push(String(m).toUpperCase()); } }); });
+      var html = '<div class="card"><div class="rname">' + esc(name) + '</div>' +
+                 '<div class="rmeta">' + esc(meta) + '</div>' +
+                 (muscles.length ? '<div class="dmus">' + muscles.map(esc).join(' · ') + '</div>' : '');
       days.forEach(function(d,i){
-        var exList = d.e || [];
-        // muscles worked this session — unique, in first-seen order, uppercase (named, no color code) like the sticker
-        var seen = {}, muscles = [];
-        exList.forEach(function(e){ var m = e[1]; if (m && !seen[m]) { seen[m] = 1; muscles.push(String(m).toUpperCase()); } });
-        var rows = exList.map(function(e){ var sr = e[2] ? '<span class="sr">' + esc(e[2]) + '</span>' : ''; return '<div class="ex"><span>' + esc(e[0]) + '</span>' + sr + '</div>'; }).join('') || '<div class="ex">—</div>';
-        html += '<div class="day">' +
-                  '<div class="dlabel">' + esc(d.l || ('Session ' + (i+1))) + '</div>' +
-                  (muscles.length ? '<div class="dmus">' + muscles.map(esc).join(' · ') + '</div>' : '') +
-                  '<div class="exrows">' + rows + '</div>' +
-                '</div>';
+        var k = (d.e || []).length;
+        html += '<div class="day"><div class="drow">' +
+                  '<span class="dlabel">' + esc(d.l || ('Session ' + (i+1))) + '</span>' +
+                  '<span class="sr">' + k + ' exercise' + (k!==1?'s':'') + '</span>' +
+                '</div></div>';
       });
-      html += '</div>';
+      html += '<div class="unlock">🔒 The exercise list, sets &amp; reps open in the app — <b>free</b>.</div></div>';
       document.getElementById('content').innerHTML = html;
     }
     function fail(){
