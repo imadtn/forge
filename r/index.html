@@ -23,7 +23,7 @@
     // Smart App Banner (Safari only): shows a native "OPEN" if BeatLast is installed — passing the routine code so the
     // app imports it — or "GET" if not. Injected early with the code from the URL so Safari picks it up on load.
     // window.__code = injected by the Cloudflare worker for PATH-form links (/r/<code>), which carry no ?r=
-    (function () { try { var q = new URLSearchParams(location.search); var c = q.get('r') || window.__code || null; var i = q.get('import'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) : (i ? ', app-argument=beatlast://import?import=' + encodeURIComponent(i) : '')); document.head.appendChild(m); } catch (e) {} })();
+    (function () { try { var q = new URLSearchParams(location.search); var c = q.get('r') || window.__code || null; var i = q.get('import'); var m = document.createElement('meta'); m.name = 'apple-itunes-app'; m.content = 'app-id=6782681867' + (c ? ', app-argument=beatlast://import?r=' + encodeURIComponent(c) + '&seen=1' : (i ? ', app-argument=beatlast://import?import=' + encodeURIComponent(i) : '')); document.head.appendChild(m); } catch (e) {} })();
   </script>
   <style>
     :root { color-scheme: dark; --volt:#C6F84E; --bg:#0B0B0C; --panel:#141416; --line:#2A2A2F; --text:#F4F4F2; --dim:#9AA0A6; --faint:#7C7C84; }
@@ -76,6 +76,13 @@
     var API_KEY = "AIzaSyDxNU8QFg6HoKMmyCM7M7OH-yCluUZhiks";
     var PROJECT = "imadtnforge";
 
+    // per-device view marker, key-compatible with the app's store.js (`bl:v:<code>`). The two live on
+    // DIFFERENT origins so they can't read each other's storage — the web→app hand-off is deduped by
+    // passing seen=1 on the deep link instead (the app adopts the marker). Best-effort: private mode
+    // just falls back to counting, never throws.
+    function viewKey(code){ return 'bl:v:' + String(code||'').toLowerCase(); }
+    function viewCounted(code){ try { return !!localStorage.getItem(viewKey(code)); } catch(e){ return false; } }
+    function markViewCounted(code){ try { localStorage.setItem(viewKey(code), '1'); } catch(e){} }
     function b64urlDec(s){ var b=s.replace(/-/g,'+').replace(/_/g,'/'); while(b.length%4)b+='='; return decodeURIComponent(escape(atob(b))); }
     function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 
@@ -148,6 +155,12 @@
             try { render(JSON.parse(j)); } catch(e){ fail(); return; }
             // count the view — unauthenticated strict +1, allowed by the shares rules' counter branch.
             // Without this the owner's "👁 views" only counted in-app opens and read ~0 forever.
+            // UNIQUE PER DEVICE PER CODE (2026-07-27): one marker per share code (`bl:v:<code>`), so a
+            // reload / the sharer checking their own link / a second visit never re-counts, while a
+            // DIFFERENT routine (different code) still counts on its own. Marker is per-code by
+            // construction — sharing 10 routines keeps 10 independent counts.
+            if (viewCounted(code)) return;
+            markViewCounted(code);
             try {
               fetch('https://firestore.googleapis.com/v1/projects/' + PROJECT + '/databases/(default)/documents:commit?key=' + API_KEY, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -164,7 +177,9 @@
       } catch(e){ fail(); }
       // one recovery token + one custom-scheme deep link, whichever link kind this is
       var TOKEN  = code ? ('beatlast:r:' + code) : (imp ? ('beatlast:i:' + imp) : null);
-      var SCHEME = code ? ('beatlast://import?r=' + encodeURIComponent(code))
+      // seen=1: THIS page already counted the open, so the app must not count the same tap again
+      // (different origins → it can't see our localStorage marker; it adopts one from this flag).
+      var SCHEME = code ? ('beatlast://import?r=' + encodeURIComponent(code) + '&seen=1')
                  : (imp ? ('beatlast://import?import=' + encodeURIComponent(imp)) : null);
       // wire the primary CTA to open the app (falls back to the App Store)
       var openBtn = document.getElementById('openBtn');
